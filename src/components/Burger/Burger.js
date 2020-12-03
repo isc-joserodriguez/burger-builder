@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 import classes from './Burger.module.css';
@@ -12,8 +13,8 @@ const burger = (props) => {
         return arr.concat(el)
     }, []);
 
-    if (transformedIngredients.length === 0){
-        transformedIngredients= <p>Please start adding ingredients!</p>
+    if (transformedIngredients.length === 0) {
+        transformedIngredients = <p>Please start adding ingredients!</p>
     }
     return (
         <div className={classes.Burger}>
@@ -22,6 +23,10 @@ const burger = (props) => {
             <BurgerIngredient type="bread-bottom" />
         </div>
     );
+}
+
+burger.propTypes = {
+    ingredients: PropTypes.object.isRequired
 }
 
 export default burger;
