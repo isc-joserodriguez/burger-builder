@@ -18,10 +18,6 @@ const INGREDIENT_PRICES = {
 
 
 class BurgerBuilder extends Component {
-    /* constructor(props) {
-        super(props);
-        this.state = { ...}
-    } */
     state = {
         ingredients: null,
         totalPrice: 4,
@@ -32,11 +28,11 @@ class BurgerBuilder extends Component {
     }
 
     componentDidMount() {
-        axios.get('https://react-burger-builder-aecb3-default-rtdb.firebaseio.com/ingredients.json').then(response => {
+        /* axios.get('https://react-burger-builder-aecb3-default-rtdb.firebaseio.com/ingredients.json').then(response => {
             this.setState({ ingredients: response.data });
         }).catch(error => {
             this.setState({ error: true });
-        });
+        }); */
     }
 
     updatePurchaseState(ingridients) {
