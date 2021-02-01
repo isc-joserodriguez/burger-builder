@@ -25,7 +25,7 @@ class OrderSummary extends Component {
                 </ul>
                 <p><strong>Total Price: {this.props.price.toFixed(2)}</strong></p>
                 <p>Continue to Checkout?</p>
-                <Button btnType="Danger" clicked={this.props.purchseCanceled}>CANCEL</Button>
+                <Button btnType="Danger" clicked={this.props.purchaseCanceled}>CANCEL</Button>
                 <Button btnType="Success" clicked={this.props.purchaseContinued}>CONTINUE</Button>
             </Aux>
         );
@@ -35,7 +35,7 @@ class OrderSummary extends Component {
 OrderSummary.propTypes = {
     ingredients: PropTypes.object.isRequired,
     price: PropTypes.number.isRequired,
-    purchseCanceled: PropTypes.func.isRequired,
+    purchaseCanceled: PropTypes.func.isRequired,
     purchaseContinued: PropTypes.func.isRequired
 }
 
