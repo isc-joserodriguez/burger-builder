@@ -8,10 +8,11 @@ export const authStart = () => {
     };
 };
 
-export const authSuccess = (authData) => {
+export const authSuccess = (token, userId) => {
     return {
         type: actionTypes.AUTH_SUCCESS,
-        authData: authData
+        idToken: token,
+        userId: userId
     };
 };
 
@@ -31,11 +32,11 @@ export const auth = (email, password, isSignup) => {
             returnSecureToken: true
         };
         let url = 'https://identitytoolkit.googleapis.com/v1/accounts:signUp'
-        if(!isSignup)url='https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'
+        if (!isSignup) url = 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword'
         axios.post(`${url}?key=AIzaSyBhzgiFUlkHgotZYUR97-kA7xn1ayzJXoE`, authData)
             .then(response => {
                 console.log(response);
-                dispatch(authSuccess(response.data));
+                dispatch(authSuccess(response.data.idToken, response.data.localId));
             })
             .catch(err => {
                 console.log(err);
