@@ -1,5 +1,4 @@
 import React from 'react';
-
 import { configure, shallow } from 'enzyme';
 import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
 
@@ -24,7 +23,7 @@ describe('<NavigationItems />', () => {
         expect(wrapper.find(NavigationItem)).toHaveLength(3);
     });
 
-    it('Should render trhee <NavigationItem /> elements if authenticated', () => {
+    it('Should an exact logout button', () => {
         wrapper.setProps({ isAuthenticated: true });
         expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)).toEqual(true);
     });
