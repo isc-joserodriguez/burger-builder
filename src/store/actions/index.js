@@ -9,6 +9,12 @@ export {
     purchaseBurger,
     purchaseInit,
     fetchOrders,
+    fetchOrdersStart,
+    fetchOrdersSuccess,
+    fetchOrdersFail,
+    purchaseBurgerStart,
+    purchaseBurgerSuccess,
+    purchaseBurgerFail
 } from './order';
 export {
     auth,
@@ -19,5 +25,5 @@ export {
     checkAuthTimeout,
     logout,
     logoutSucceed,
-    setAuthRedirectPath,
+    setAuthRedirectPath
 } from './auth'
