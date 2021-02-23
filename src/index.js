@@ -41,9 +41,9 @@ const app = (
 );
 
 ReactDOM.render(
-  <React.StrictMode>
+  <React.Fragment>
     {app}
-  </React.StrictMode>,
+  </React.Fragment>,
   document.getElementById('root')
 );
 
