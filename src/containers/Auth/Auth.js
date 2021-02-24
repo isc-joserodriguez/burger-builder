@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { connect } from 'react-redux';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
 import Input from '../../components/UI/Input/Input';
@@ -43,10 +43,19 @@ const Auth = props => {
         }
     });
     const [isSignup, setIsSignup] = useState(true);
-    const {buildingBurger, authRedirectPath, onSetAuthRedirectPath} = props;
+
+    const dispatch = useDispatch();
+
+    const loading = useSelector(state => state.auth.loading);
+    const error = useSelector(state => state.auth.error);
+    const isAuthenticated = useSelector(state => !!state.auth.token);
+    const buildingBurger = useSelector(state => state.burgerBuilder.building);
+    const authRedirectPath = useSelector(state => state.auth.authRedirectPath);
+
+    const onAuth = (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup));
+    const onSetAuthRedirectPath = useCallback(() => dispatch(actions.setAuthRedirectPath('/')), [dispatch]);
 
     useEffect(() => {
-
         if (!buildingBurger && authRedirectPath !== '/') {
             onSetAuthRedirectPath();
         }
@@ -65,7 +74,7 @@ const Auth = props => {
 
     const submitHandler = (event) => {
         event.preventDefault();
-        props.onAuth(authForm.email.value, authForm.password.value, isSignup);
+        onAuth(authForm.email.value, authForm.password.value, isSignup);
     }
 
     const switchAuthModeHandler = () => {
@@ -80,35 +89,24 @@ const Auth = props => {
         })
     }
 
-    let form = formElementsArray.map(formElement => (
-        <Input
-            key={formElement.id}
-            elementType={formElement.config.elementType}
-            elementConfig={formElement.config.elementConfig}
-            value={formElement.config.value}
-            invalid={!formElement.config.valid}
-            errorMessage={formElement.config.errorMessage}
-            shouldValidate={formElement.config.validation}
-            touched={formElement.config.touched}
-            changed={(event) => inputChangedHandler(event, formElement.id)} />
-    ));
+    let form = loading
+        ? <Spinner />
+        : formElementsArray.map(formElement => (
+            <Input
+                key={formElement.id}
+                elementType={formElement.config.elementType}
+                elementConfig={formElement.config.elementConfig}
+                value={formElement.config.value}
+                invalid={!formElement.config.valid}
+                errorMessage={formElement.config.errorMessage}
+                shouldValidate={formElement.config.validation}
+                touched={formElement.config.touched}
+                changed={(event) => inputChangedHandler(event, formElement.id)} />
+        ));
 
-    if (props.loading) {
-        form = <Spinner />
-    }
+    let errorMessage = error && <p>{error.message}</p>;
 
-    let errorMessage = null;
-    if (props.error) {
-        errorMessage = (
-            <p>{props.error.message}</p>
-        )
-    }
-
-    let authRedirect = null;
-    if (props.isAuthenticated) {
-        authRedirect = <Redirect to={props.authRedirectPath} />
-    }
-
+    let authRedirect = isAuthenticated && <Redirect to={authRedirectPath} />;
 
     return (
         <div className={classes.Auth}>
@@ -125,21 +123,4 @@ const Auth = props => {
     );
 }
 
-const mapStateToProps = state => {
-    return {
-        loading: state.auth.loading,
-        error: state.auth.error,
-        isAuthenticated: !!state.auth.token,
-        buildingBurger: state.burgerBuilder.building,
-        authRedirectPath: state.auth.authRedirectPath
-    };
-};
-
-const mapDispatchToProps = dispatch => {
-    return {
-        onAuth: (email, password, isSignup) => dispatch(actions.auth(email, password, isSignup)),
-        onSetAuthRedirectPath: () => dispatch(actions.setAuthRedirectPath('/'))
-    };
-};
-export default connect(mapStateToProps, mapDispatchToProps)(Auth);
-
+export default Auth;

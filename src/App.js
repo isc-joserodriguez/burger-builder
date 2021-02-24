@@ -1,6 +1,6 @@
-import React, { useEffect, Suspense } from 'react';
+import React, { useEffect, Suspense, useCallback } from 'react';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom'
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import Layout from './hoc/Layout/Layout';
 import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
@@ -20,7 +20,11 @@ const Auth = React.lazy(() => {
 });
 
 const App = props => {
-  const { onTryAutoSignup } = props;
+  const dispatch = useDispatch();
+
+  const isAuthenticated = useSelector(state => !!state.auth.token);
+
+  const onTryAutoSignup = useCallback(() => dispatch(actions.authCheckState()), [dispatch]);
 
   useEffect(() => {
     onTryAutoSignup();
@@ -34,7 +38,7 @@ const App = props => {
     </Switch>
   );
 
-  if (props.isAuthenticated) {
+  if (isAuthenticated) {
     routes = (
       <Switch>
         <Route path="/checkout" render={(props) => <Checkout {...props} />} />
@@ -57,17 +61,4 @@ const App = props => {
   )
 }
 
-
-const mapStateToProps = state => {
-  return {
-    isAuthenticated: !!state.auth.token
-  }
-}
-
-const mapDispatchToProps = dispatch => {
-  return {
-    onTryAutoSignup: () => dispatch(actions.authCheckState())
-  };
-};
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
+export default withRouter(App);
