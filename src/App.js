@@ -20,10 +20,11 @@ const Auth = React.lazy(() => {
 });
 
 const App = props => {
+  const { onTryAutoSignup } = props;
 
   useEffect(() => {
-    props.onTryAutoSignup();
-  }, []);
+    onTryAutoSignup();
+  }, [onTryAutoSignup]);
 
   let routes = (
     <Switch>
@@ -48,7 +49,7 @@ const App = props => {
   return (
     <div>
       <Layout>
-        <Suspense fallback={<p>Loding...</p>}>
+        <Suspense fallback={<p>Loading...</p>}>
           {routes}
         </Suspense>
       </Layout>
